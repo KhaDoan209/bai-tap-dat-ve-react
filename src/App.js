@@ -1,8 +1,12 @@
 import logo from './logo.svg';
-import './App.css';
+import BTDatVeXemPhim from './components/BTDatVeXemPhim/BTDatVeXemPhim';
 
 function App() {
-   return <div>Bai Tap Đặt Vé</div>;
+   return (
+      <div>
+         <BTDatVeXemPhim />
+      </div>
+   );
 }
 
 export default App;
