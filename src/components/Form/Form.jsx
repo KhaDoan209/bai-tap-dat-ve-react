@@ -8,22 +8,26 @@ class Form extends Component {
       },
    };
    handleOnChange = (event) => {
-      event.preventDefault();
       let { value, name } = event.target;
-      let userInfor = { ...this.props.userInfor };
-      userInfor[name] = value;
-      console.log(userInfor);
-
-      // let action = {
-      //    type: 'LUU_USER_INFOR',
-      //    userInfor: userInfor,
-      // };
-      // this.props.dispatch(action);
+      let newUserInfor = { ...this.state.userInfor };
+      newUserInfor[name] = value;
+      this.setState({ userInfor: newUserInfor });
    };
    submitForm = (event) => {
       event.preventDefault();
-
-      console.log(this.state);
+      if (
+         this.state.userInfor.name == '' ||
+         this.state.userInfor.numberOfSeats == 0
+      ) {
+         alert('Please fill in all the form fields');
+      } else {
+         let action = {
+            type: 'LUU_USER_INFOR',
+            userInfor: this.state.userInfor,
+         };
+         this.props.dispatch(action);
+         alert('Please choose your wanted seat');
+      }
    };
    render() {
       return (

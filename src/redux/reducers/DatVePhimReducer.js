@@ -200,7 +200,19 @@ export const datVePhimReducer = (state = initialState, action) => {
       case 'LUU_USER_INFOR':
          state.userInfor = { ...action.userInfor };
          return { ...state };
+      case 'CHON_GHE':
+         state.selectedSeats = [...action.selectedSeats];
 
+         
+         state.seatsList.map((item) => {
+            return item.danhSachGhe.map((ghe) => {
+               if (ghe.soGhe == action.id) {
+                  console.log(ghe);
+               }
+            });
+         });
+
+         return { ...state };
       default:
          return state;
    }

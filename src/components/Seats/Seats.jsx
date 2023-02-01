@@ -2,15 +2,26 @@ import React, { Component } from 'react';
 import '../BTDatVeXemPhim.scss';
 import { connect } from 'react-redux';
 class Seats extends Component {
-   handleOnClick = () => {
+   state = { selectedSeat: [] };
+   handleOnClick = (id) => {
       if (
          this.props.userInfor.name !== '' &&
          this.props.userInfor.numberOfSeats !== 0
       ) {
-         alert('Let choose your seats');
+         let newSelectedSeat = { soGhe: id, daDat: true };
+         let newSelectedSeatArray = [...this.state.selectedSeat];
+         newSelectedSeatArray.push(newSelectedSeat);
+         this.setState({ selectedSeat: newSelectedSeatArray });
       } else {
          alert('Please fill in the form before choosing seats');
       }
+   };
+   confirmSelectSeats = () => {
+      let action = {
+         type: 'CHON_GHE',
+         selectedSeats: this.state.selectedSeat,
+      };
+      this.props.dispatch(action);
    };
    render() {
       return (
@@ -28,7 +39,9 @@ class Seats extends Component {
                         {item.danhSachGhe.map((item) => {
                            return (
                               <div
-                                 onClick={this.handleOnClick}
+                                 onClick={() => {
+                                    this.handleOnClick(item.soGhe);
+                                 }}
                                  className='col ghe'
                                  key={item.soGhe}
                               >
@@ -40,6 +53,14 @@ class Seats extends Component {
                   );
                }
             })}
+            <div className='row'>
+               <button
+                  onClick={this.confirmSelectSeats}
+                  className='btn btn-light d-flex justify-content-center mt-2'
+               >
+                  Select Seat
+               </button>
+            </div>
          </div>
       );
    }
@@ -49,6 +70,7 @@ const mapStateToProps = (rootReducer) => {
    return {
       seatsList: rootReducer.datVePhimReducer.seatsList,
       userInfor: rootReducer.datVePhimReducer.userInfor,
+      selectedSeat: rootReducer.datVePhimReducer.selectedSeats,
    };
 };
 
