@@ -1,23 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 class Form extends Component {
+   state = {
+      userInfor: {
+         name: '',
+         numberOfSeats: 0,
+      },
+   };
    handleOnChange = (event) => {
       event.preventDefault();
       let { value, name } = event.target;
       let userInfor = { ...this.props.userInfor };
       userInfor[name] = value;
-      let action = {
-         type: 'LUU_USER_INFOR',
-         userInfor: userInfor,
-      };
-      this.props.dispatch(action);
+      console.log(userInfor);
+
+      // let action = {
+      //    type: 'LUU_USER_INFOR',
+      //    userInfor: userInfor,
+      // };
+      // this.props.dispatch(action);
    };
-   //    submitForm = (event) => {
-   //       event.preventDefault();
-   //       let userInfor = this.handleOnChange();
-   //       console.log(userInfor);
-   //    };
+   submitForm = (event) => {
+      event.preventDefault();
+
+      console.log(this.state);
+   };
    render() {
       return (
          <div className='col-4 text-white'>
@@ -45,7 +52,7 @@ class Form extends Component {
                      />
                   </div>
                   <button
-                     onClick={this.handleOnChange}
+                     onClick={this.submitForm}
                      type='submit'
                      className='btn btn-primary'
                   >

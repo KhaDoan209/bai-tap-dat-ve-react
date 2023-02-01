@@ -2,6 +2,16 @@ import React, { Component } from 'react';
 import '../BTDatVeXemPhim.scss';
 import { connect } from 'react-redux';
 class Seats extends Component {
+   handleOnClick = () => {
+      if (
+         this.props.userInfor.name !== '' &&
+         this.props.userInfor.numberOfSeats !== 0
+      ) {
+         alert('Let choose your seats');
+      } else {
+         alert('Please fill in the form before choosing seats');
+      }
+   };
    render() {
       return (
          <div className=''>
@@ -9,9 +19,22 @@ class Seats extends Component {
                if (item.hang !== '') {
                   return (
                      <div className='row'>
-                        <div className='col firstChar'>{item.hang}</div>
+                        <div
+                           key={item.hang}
+                           className='col firstChar'
+                        >
+                           {item.hang}
+                        </div>
                         {item.danhSachGhe.map((item) => {
-                           return <div className='col ghe'>{item.soGhe}</div>;
+                           return (
+                              <div
+                                 onClick={this.handleOnClick}
+                                 className='col ghe'
+                                 key={item.soGhe}
+                              >
+                                 {item.soGhe}
+                              </div>
+                           );
                         })}
                      </div>
                   );
@@ -25,6 +48,7 @@ class Seats extends Component {
 const mapStateToProps = (rootReducer) => {
    return {
       seatsList: rootReducer.datVePhimReducer.seatsList,
+      userInfor: rootReducer.datVePhimReducer.userInfor,
    };
 };
 
