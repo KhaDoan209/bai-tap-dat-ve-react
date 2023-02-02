@@ -14,6 +14,7 @@ class Table extends Component {
                   <td>{numberOfSeats}</td>
                   <td>
                      {selectedSeats.map((item) => {
+                        console.log(item);
                         return `${item.soGhe}, `;
                      })}
                   </td>

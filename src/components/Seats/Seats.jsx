@@ -3,18 +3,34 @@ import '../BTDatVeXemPhim.scss';
 import { connect } from 'react-redux';
 class Seats extends Component {
    state = { selectedSeat: [] };
+
    handleOnClick = (id) => {
-      if (
-         this.props.userInfor.name !== '' &&
-         this.props.userInfor.numberOfSeats !== 0
-      ) {
-         let newSelectedSeat = { soGhe: id, daDat: true };
-         let newSelectedSeatArray = [...this.state.selectedSeat];
-         newSelectedSeatArray.push(newSelectedSeat);
-         this.setState({ selectedSeat: newSelectedSeatArray });
+      let userInfor = this.props.userInfor;
+
+      if (userInfor.name !== '' && userInfor.numberOfSeats !== 0) {
+         if (this.state.selectedSeat.length < userInfor.numberOfSeats) {
+            let newSelectedSeatArray = [...this.state.selectedSeat];
+
+            newSelectedSeatArray.push(id);
+            this.setState({ selectedSeat: newSelectedSeatArray });
+            let action = {
+               type: 'DANG_CHON',
+               pendingSeats: newSelectedSeatArray,
+            };
+            this.props.dispatch(action);
+         } else {
+            alert('Please enter a new number of seats');
+         }
       } else {
          alert('Please fill in the form before choosing seats');
       }
+   };
+   clearSelection = () => {
+      let action = {
+         type: 'XOA_GHE',
+         selectedSeats: this.state.selectedSeat,
+      };
+      this.props.dispatch(action);
    };
    confirmSelectSeats = () => {
       let action = {
@@ -42,7 +58,11 @@ class Seats extends Component {
                                  onClick={() => {
                                     this.handleOnClick(item.soGhe);
                                  }}
-                                 className='col ghe'
+                                 className={
+                                    item.daDat
+                                       ? 'col ghe gheDuocChon'
+                                       : 'col ghe'
+                                 }
                                  key={item.soGhe}
                               >
                                  {item.soGhe}
@@ -53,12 +73,18 @@ class Seats extends Component {
                   );
                }
             })}
-            <div className='row'>
+            <div className='row justify-content-end'>
                <button
                   onClick={this.confirmSelectSeats}
                   className='btn btn-light d-flex justify-content-center mt-2'
                >
                   Select Seat
+               </button>
+               <button
+                  onClick={this.clearSelection}
+                  className='btn btn-danger d-flex justify-content-center mt-2 ml-5'
+               >
+                  Clear
                </button>
             </div>
          </div>
@@ -71,6 +97,7 @@ const mapStateToProps = (rootReducer) => {
       seatsList: rootReducer.datVePhimReducer.seatsList,
       userInfor: rootReducer.datVePhimReducer.userInfor,
       selectedSeat: rootReducer.datVePhimReducer.selectedSeats,
+      pendingSeats: rootReducer.datVePhimReducer.pendingSeats,
    };
 };
 

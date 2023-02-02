@@ -30,8 +30,8 @@ const initialState = {
             { soGhe: 'A8', gia: 75000, daDat: false },
             { soGhe: 'A9', gia: 75000, daDat: false },
             { soGhe: 'A10', gia: 75000, daDat: false },
-            { soGhe: 'A11', gia: 0, daDat: true },
-            { soGhe: 'A12', gia: 0, daDat: true },
+            { soGhe: 'A11', gia: 0, daDat: false },
+            { soGhe: 'A12', gia: 0, daDat: false },
          ],
       },
       {
@@ -193,6 +193,7 @@ const initialState = {
       numberOfSeats: 0,
    },
    selectedSeats: [],
+   pendingSeats: [],
 };
 
 export const datVePhimReducer = (state = initialState, action) => {
@@ -200,18 +201,62 @@ export const datVePhimReducer = (state = initialState, action) => {
       case 'LUU_USER_INFOR':
          state.userInfor = { ...action.userInfor };
          return { ...state };
-      case 'CHON_GHE':
-         state.selectedSeats = [...action.selectedSeats];
 
-         
-         state.seatsList.map((item) => {
-            return item.danhSachGhe.map((ghe) => {
-               if (ghe.soGhe == action.id) {
-                  console.log(ghe);
-               }
-            });
+      case 'DANG_CHON':
+         let pendingSeatsArray = action.pendingSeats.map((item) => {
+            return item;
          });
 
+         for (let selectedSeat in pendingSeatsArray) {
+            state.seatsList.map((item) => {
+               return item.danhSachGhe.map((ghe) => {
+                  if (ghe.soGhe === pendingSeatsArray[selectedSeat]) {
+                     ghe.daDat = true;
+                     state.pendingSeats.push(ghe);
+                  }
+               });
+            });
+         }
+         state.pendingSeats = [...state.pendingSeats];
+         return { ...state };
+
+      case 'CHON_GHE':
+         let selectedSeatsArray = action.selectedSeats.map((item) => {
+            return item;
+         });
+
+         for (let selectedSeat in selectedSeatsArray) {
+            state.seatsList.map((item) => {
+               return item.danhSachGhe.map((ghe) => {
+                  if (ghe.soGhe === selectedSeatsArray[selectedSeat]) {
+                     ghe.daDat = true;
+                     state.selectedSeats.push(ghe);
+                  }
+               });
+            });
+         }
+         state.selectedSeats = [...state.selectedSeats];
+         return { ...state };
+
+      case 'XOA_GHE':
+         let undoSelectArray = action.selectedSeats.map((item) => {
+            return item;
+         });
+
+         for (let selectedSeat in undoSelectArray) {
+            state.seatsList.map((item) => {
+               return item.danhSachGhe.map((ghe) => {
+                  if (ghe.soGhe === undoSelectArray[selectedSeat]) {
+                     ghe.daDat = false;
+                     state.selectedSeats.push(ghe);
+                  }
+               });
+            });
+         }
+
+         state.userInfor.name = '';
+         state.userInfor.numberOfSeats = '';
+         console.log(state);
          return { ...state };
       default:
          return state;
