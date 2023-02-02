@@ -26,6 +26,7 @@ class Seats extends Component {
       }
    };
    clearSelection = () => {
+      this.setState({ selectedSeat: [] });
       let action = {
          type: 'XOA_GHE',
          selectedSeats: this.state.selectedSeat,

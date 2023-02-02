@@ -253,9 +253,10 @@ export const datVePhimReducer = (state = initialState, action) => {
                });
             });
          }
-
          state.userInfor.name = '';
-         state.userInfor.numberOfSeats = '';
+         state.userInfor.numberOfSeats = 0;
+         state.pendingSeats = [];
+         state.selectedSeats = [];
          console.log(state);
          return { ...state };
       default:
